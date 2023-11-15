@@ -30,6 +30,7 @@ route: http://127.0.0.1:5000/api/items/1/add \
 method: POST\
 json:\
 {
+    \
   "name": "apple", \
   "expiration_date": "2023-08-04", \
   "category": "food", \
@@ -46,6 +47,7 @@ route: http://127.0.0.1:5000/api/users/add \
 method: POST\
 json:\
 {
+    \
   "username": "jordan", \
   "password": "password123", \
   "email": "jordan@gmail.com" \
