@@ -26,7 +26,8 @@ https://dev.mysql.com/doc/mysql-getting-started/en/
 
 8) Right click the schema, New -> Query console
 
-9) Create users table, insert a new user, and print all the rows in the table:
+9) Create users table, insert a new user, and print all the rows in the table: \
+Paste into the new query console and hit run button to execute \
 ```
 create table users (
     id int not null auto_increment primary key,
