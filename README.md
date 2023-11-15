@@ -1,25 +1,28 @@
 # Set Up MySQL database
-1) Create Jetbrains account with student email: https://account.jetbrains.com/login \\
+1) Create Jetbrains account with student email: https://account.jetbrains.com/login
 
-2) Download DataGrip from account \\
+2) Download DataGrip from account
 
 3) Install mysql:\
 Make sure to use\
 user: root\
 password: password\
 (We should all use the same user and password) \
-https://dev.mysql.com/doc/mysql-getting-started/en/ \\
+https://dev.mysql.com/doc/mysql-getting-started/en/ 
 
-
-4) In DataGrip, File -> New -> Project \
+4) In DataGrip, File -> New -> Project
 
 5) File -> New -> Data source -> MySQL (Name: expidite, use user and password from last step). Make sure to test connection!
 
+![database](images/db_1.png)
+
 6) Right click expidite data source -> New -> Schema
-￼
+
+![database](images/db_2.png)
 
 7) Name it ‘expidite’ (you should get an error message after clicking OK). Now the expidite schema should show up underneath
-￼
+
+![database](images/db_3.png)
 
 8) Right click the schema, New -> Query console
 
@@ -38,7 +41,6 @@ create table users (
 `select * from expidite.users;`
 
 This should output the row you just created
-
 
 10) Create items table, insert a new item, and print all the rows in the table:
 ```
@@ -100,7 +102,7 @@ Runs file names server.py. Open the local host address in the console output and
 ### use [ReqBin](https://reqbin.com/) (install extension) to test api routes that require json data
 Example adding new item:\
 route: http://127.0.0.1:5000/api/items/1/add \
-method: POST\
+method: POST
 ```
 json:
 {
@@ -118,7 +120,7 @@ json:
 
 Example adding new user:\
 route: http://127.0.0.1:5000/api/users/add \
-method: POST\
+method: POST
 ```
 json:
 {
