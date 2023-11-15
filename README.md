@@ -30,12 +30,12 @@ route: http://127.0.0.1:5000/api/items/1/add \
 method: POST\
 json:\
 {
-  "name": "apple",
-  "expiration_date": "2023-08-04",
-  "category": "food",
-  "location": "fridge",
-  "production_date": "2023-06-02",
-  "alert_days": 5
+  "name": "apple", \
+  "expiration_date": "2023-08-04", \
+  "category": "food", \
+  "location": "fridge", \
+  "production_date": "2023-06-02", \
+  "alert_days": 5 \
 }
 \
 ![Add Item Example](images/add_item_example.png)
@@ -46,9 +46,9 @@ route: http://127.0.0.1:5000/api/users/add \
 method: POST\
 json:\
 {
-  "username": "jenny",
-  "password": "password123",
-  "email": "jenny@jenny.com"
+  "username": "jordan", \
+  "password": "password123", \
+  "email": "jordan@gmail.com" \
 }
 \
 ![Add User Example](images/add_user_example.png)
