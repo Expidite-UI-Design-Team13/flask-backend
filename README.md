@@ -36,9 +36,13 @@ create table users (
 );
 ```
 
-`insert into users set username='chance', password='password123', email='chanceony@gmail.com';`
+```
+insert into users set username='chance', password='password123', email='chanceony@gmail.com';
+```
 
-`select * from expidite.users;`
+```
+select * from expidite.users;
+```
 
 This should output the row you just created
 
@@ -61,9 +65,13 @@ create table items (
 );
 ```
 
-```insert into items set name='milk', expiration_date='2023-12-18', category='food', location='fridge', alert_days='10', user_id=1;```
+```
+insert into items set name='milk', expiration_date='2023-12-18', category='food', location='fridge', alert_days='10', user_id=1;
+```
 
-`select * from expidite.items;`
+```
+select * from expidite.items;
+```
 
 This should output the row you just created
 
