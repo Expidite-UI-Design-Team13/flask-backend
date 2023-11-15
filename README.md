@@ -9,6 +9,16 @@ Activates virtual environment
 
 Installs Flask
 
-### `flask --app main run`
 
-Runs file names main.py. Open the local host address in the console output and you should see "Hello, World!"
+### `pip install pymysql`
+
+Installs python MySQL package
+
+### `pip install flask_cors`
+
+Installs python Flask CORS package
+
+
+### `flask --app server run`
+
+Runs file names server.py. Open the local host address in the console output and you should see "Hello, World!"
