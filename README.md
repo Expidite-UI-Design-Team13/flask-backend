@@ -38,7 +38,7 @@ json:\
   "alert_days": 5
 }
 \
-![Add Item Example](add_item_example.png)
+![Add Item Example](images/add_item_example.png)
 
 
 Example adding new user:\
@@ -51,4 +51,4 @@ json:\
   "email": "jenny@jenny.com"
 }
 \
-![Add User Example](add_user_example.png)
+![Add User Example](images/add_user_example.png)
