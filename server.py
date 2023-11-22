@@ -46,6 +46,27 @@ def get_users():
 
     return rsp
 
+# get specific user from username and password
+@app.route("/api/users/login", methods = ["GET", "POST"])
+def get_user():
+    cur = get_cur()
+
+    json_data = request.get_json()
+
+    username  = json_data["username"]
+    password = json_data["password"]
+
+    cur.execute("SELECT * FROM expidite.users where username=%s and password=%s;", (username, password))
+
+    result = cur.fetchone()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
 # add new user
 @app.route("/api/users/add", methods = ["POST"])
 def add_user():
