@@ -82,16 +82,15 @@ def create_token():
     cur.execute("SELECT * FROM expidite.users where username=%s and password=%s;", (username, password))
 
     result = cur.fetchone()
+    access_token = create_access_token(identity = username)
+    result.update({"access_token": access_token})
 
     if result:
         rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
     else:
         return {"msg": "Wrong email or password"}, 401
-    
-    access_token = create_access_token(identity = username)
-    response = {"access_token": access_token}
 
-    return response
+    return rsp
 
 # get specific user from username and password
 @app.route('/api/users/user', methods = ["GET", "POST"])
@@ -101,17 +100,16 @@ def get_user():
 
     json_data = request.get_json()
 
-    username  = json_data["username"]
-    password = json_data["password"]
+    id  = json_data["id"]
 
-    cur.execute("SELECT * FROM expidite.users where username=%s and password=%s;", (username, password))
+    cur.execute("SELECT * FROM expidite.users where id=%s;", id)
 
     result = cur.fetchone()
 
     if result:
         rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
     else:
-        return {"msg": "Wrong username or password"}, 401
+        return {"msg": "User not found"}, 401
     
     return rsp
 
@@ -133,21 +131,29 @@ def add_user():
 
     cur.execute("insert into expidite.users set username=%s, password=%s, email=%s;", (username, password, email))
 
+    cur.execute("SELECT * FROM expidite.users where username=%s and password=%s;", (username, password))
+
     result = cur.fetchone()
+    access_token = create_access_token(identity = username)
+    result.update({"access_token": access_token})
 
     if result:
         rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
     else:
         rsp = Response(json.dumps([]), status=200, content_type="text/plain")
 
-    return create_token()
+    return rsp
 
 # get all items from specified user
 # user is determined by user_id in api request route
-@app.route("/api/items/<user_id>", methods = ["GET"])
+@app.route("/api/items", methods = ["GET", "POST"])
 @jwt_required()
-def get_items_by_user(user_id):
+def get_items_by_user():
     cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+
     cur.execute("SELECT DISTINCT * FROM expidite.items where user_id=%s;", user_id)
     result = cur.fetchall()
 
@@ -159,12 +165,13 @@ def get_items_by_user(user_id):
     return rsp
 
 # add item for specified user
-@app.route("/api/items/<user_id>/add", methods = ["POST"])
+@app.route("/api/items/add", methods = ["POST"])
 @jwt_required()
-def add_item(user_id):
+def add_item():
     cur = get_cur()
 
     json_data = request.get_json()
+    user_id  = json_data["user_id"]
     name  = json_data["name"]
     expiration_date = json_data["expiration_date"]
     category = json_data["category"]
