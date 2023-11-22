@@ -109,6 +109,20 @@ Runs file names server.py. Open the local host address in the console output and
 
 
 ### use [ReqBin](https://reqbin.com/) (install extension) to test api routes that require json data
+
+All routes except for the login and signup routes require an authentication access token.
+
+First create an account using the signup api:
+![Signup](images/signup.png)
+
+You should see the 'access_token' in the response on the bottom.
+
+Once you have an account, you can just sign in passing the username and password in the json to the login api. This will also return the access_token.
+
+To access other routes, paste this access token into the Bearer Token in Authorization tab:
+![Token](images/token.png)
+
+
 Example adding new item:\
 route: http://127.0.0.1:5000/api/items/1/add \
 method: POST
