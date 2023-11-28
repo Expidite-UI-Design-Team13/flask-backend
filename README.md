@@ -157,3 +157,4 @@ json:
   "user_id": [your id returned when you signed up]
 }
 ```
+![Get Items Example](images/get_items_example.png)
