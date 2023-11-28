@@ -127,13 +127,16 @@ Once you have an account, you can just sign in passing the username and password
 To access other routes, paste this access token into the Bearer Token in Authorization tab:
 ![Token](images/token.png)
 
+Make a note of the id for the user returned.
 
-Example adding new item:\
-route: http://127.0.0.1:5000/api/items/1/add \
+
+Example adding new item: \
+route: http://127.0.0.1:5000/api/items/add \
 method: POST
 ```
 json:
 {
+  "user_id": [your id returned when you signed up]
   "name": "apple", 
   "expiration_date": "2023-08-04", 
   "category": "food", 
@@ -145,17 +148,12 @@ json:
 \
 ![Add Item Example](images/add_item_example.png)
 
-
-Example adding new user:\
-route: http://127.0.0.1:5000/api/users/add \
+Get all of your items:\
+route: http://127.0.0.1:5000/api/items \
 method: POST
 ```
 json:
 {
-  "username": "jordan", 
-  "password": "password123", 
-  "email": "jordan@gmail.com"
+  "user_id": [your id returned when you signed up]
 }
 ```
-\
-![Add User Example](images/add_user_example.png)
