@@ -94,6 +94,11 @@ Activates virtual environment
 Installs Flask
 
 
+### `pip install flask_jwt_extended`
+
+Installs flask jwt for authenticating routes
+
+
 ### `pip install pymysql`
 
 Installs python MySQL package
