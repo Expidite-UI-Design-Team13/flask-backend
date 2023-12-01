@@ -189,5 +189,83 @@ def add_item():
 
     return rsp
 
+# add category for specified user
+@app.route("/api/categories/add", methods = ["POST"])
+@jwt_required()
+def add_category():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+    category = json_data["category"]
+
+    cur.execute("insert into expidite.categories set user_id=%s, category=%s;", (user_id, category))
+    result = cur.fetchone()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
+# get categories for specified user
+@app.route("/api/categories", methods = ["GET", "POST"])
+@jwt_required()
+def get_categories():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+
+    cur.execute("SELECT DISTINCT * FROM expidite.categories where user_id=%s;", user_id)
+    result = cur.fetchall()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
+# add location for specified user
+@app.route("/api/locations/add", methods = ["POST"])
+@jwt_required()
+def add_location():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+    location = json_data["location"]
+
+    cur.execute("insert into expidite.locations set user_id=%s, location=%s;", (user_id, location))
+    result = cur.fetchone()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
+# get locations for specified user
+@app.route("/api/locations", methods = ["GET", "POST"])
+@jwt_required()
+def get_locations():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+
+    cur.execute("SELECT DISTINCT * FROM expidite.locations where user_id=%s;", user_id)
+    result = cur.fetchall()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
 if __name__ == '__main__':
     app.run(host="localhost", port=8000, debug=True)
