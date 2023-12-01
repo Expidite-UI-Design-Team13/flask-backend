@@ -29,7 +29,7 @@ https://dev.mysql.com/doc/mysql-getting-started/en/
 9) Create users table, insert a new user, and print all the rows in the table: \
 Paste into the new query console and hit run button to execute
 ```
-create table users (
+create table expidite.users (
     id int not null auto_increment primary key,
     username varchar(255) not null unique,
     password varchar(255) not null,
@@ -38,7 +38,7 @@ create table users (
 ```
 
 ```
-insert into users set username='chance', password='password123', email='chanceony@gmail.com';
+insert into expidite.users set username='chance', password='password123', email='chanceony@gmail.com';
 ```
 
 ```
@@ -49,7 +49,7 @@ This should output the row you just created
 
 10) Create items table, insert a new item, and print all the rows in the table:
 ```
-create table items (
+create table expidite.items (
     id int not null auto_increment primary key,
     user_id int not null,
     name varchar(255) not null,
@@ -58,7 +58,7 @@ create table items (
     location varchar(255),
     production_date char(10),
     alert_days int,
-    image longblob,
+    image varchar(255),
     foreign key (user_id)
         references users(id)
                    on update cascade
@@ -67,7 +67,7 @@ create table items (
 ```
 
 ```
-insert into items set name='milk', expiration_date='2023-12-18', category='food', location='fridge', alert_days='10', user_id=1;
+insert into expidite.items set name='milk', expiration_date='2023-12-18', category='food', location='fridge', alert_days='10', user_id=1;
 ```
 
 ```
@@ -75,6 +75,51 @@ select * from expidite.items;
 ```
 
 This should output the row you just created
+
+11) Create tables for categories and locations
+```
+create table expidite.categories (
+    id int not null auto_increment primary key,
+    user_id int not null,
+    category varchar(255) not null,
+    foreign key (user_id)
+        references users(id)
+                   on update cascade
+                   on delete cascade
+);
+```
+
+```
+insert into expidite.categories set user_id=1, category='food';
+insert into expidite.categories set user_id=1, category='medicine';
+insert into expidite.categories set user_id=1, category='skincare';
+```
+
+```
+select * from expidite.categories;
+```
+
+```
+create table expidite.locations (
+    id int not null auto_increment primary key,
+    user_id int not null,
+    location varchar(255) not null,
+    foreign key (user_id)
+        references users(id)
+                   on update cascade
+                   on delete cascade
+);
+```
+
+```
+insert into expidite.locations set user_id=1, location='kitchen';
+insert into expidite.locations set user_id=1, location='pantry';
+insert into expidite.locations set user_id=1, location='bathroom';
+```
+
+```
+select * from expidite.locations;
+```
 
 Done with the database!
 
