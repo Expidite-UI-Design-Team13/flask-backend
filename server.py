@@ -178,8 +178,9 @@ def add_item():
     location = json_data["location"]
     production_date = json_data["production_date"]
     alert_days = json_data["alert_days"]
+    image = json_data["image"]
 
-    cur.execute("insert into expidite.items set user_id=%s, name=%s, expiration_date=%s, category=%s, location=%s, production_date=%s, alert_days=%s;", (user_id, name, expiration_date, category, location, production_date, alert_days))
+    cur.execute("insert into expidite.items set user_id=%s, name=%s, expiration_date=%s, category=%s, location=%s, production_date=%s, alert_days=%s, image=%s;", (user_id, name, expiration_date, category, location, production_date, alert_days, image))
     result = cur.fetchone()
 
     if result:
@@ -188,6 +189,21 @@ def add_item():
         rsp = Response(json.dumps([]), status=200, content_type="text/plain")
 
     return rsp
+
+@app.route("/api/items/delete", methods = ["POST"])
+@jwt_required()
+def delete_item():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    item_id  = json_data["item_id"]
+
+    try: 
+        cur.execute("delete from expidite.items where id=%s", (item_id))
+    except pymysql.err.IntegrityError as err:
+        return Response("There was a problem deleting the item", status=404, content_type="text/plain")
+
+    return Response("clothing deleted successfully", status=200, content_type="application.json")
 
 # add category for specified user
 @app.route("/api/categories/add", methods = ["POST"])
