@@ -205,6 +205,29 @@ def delete_item():
 
     return Response("clothing deleted successfully", status=200, content_type="application.json")
 
+@app.route("/api/items/update", methods = ["POST"])
+@jwt_required()
+def update_item():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    item_id  = json_data["item_id"]
+    user_id  = json_data["user_id"]
+    name  = json_data["name"]
+    expiration_date = json_data["expiration_date"]
+    category = json_data["category"]
+    location = json_data["location"]
+    production_date = json_data["production_date"]
+    alert_days = json_data["alert_days"]
+    image = json_data["image"]
+
+    try: 
+        cur.execute("update expidite.items set name=%s, expiration_date=%s, category=%s, location=%s, production_date=%s, alert_days=%s, image=%s where id=%s and user_id=%s;", (name, expiration_date, category, location, production_date, alert_days, image, item_id, user_id))
+    except pymysql.err.IntegrityError as err:
+        return Response("There was a problem deleting the item", status=404, content_type="text/plain")
+
+    return Response("clothing deleted successfully", status=200, content_type="application.json")
+
 # add category for specified user
 @app.route("/api/categories/add", methods = ["POST"])
 @jwt_required()
