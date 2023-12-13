@@ -82,13 +82,13 @@ def create_token():
     cur.execute("SELECT * FROM expidite.users where username=%s and password=%s;", (username, password))
 
     result = cur.fetchone()
-    access_token = create_access_token(identity = username)
-    result.update({"access_token": access_token})
 
     if result:
+        access_token = create_access_token(identity = username)
+        result.update({"access_token": access_token})
         rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
     else:
-        return {"msg": "Wrong email or password"}, 401
+        return {"msg": "Incorrrect username or password"}, 401
 
     return rsp
 
@@ -128,6 +128,22 @@ def add_user():
     username  = json_data["username"]
     password = json_data["password"]
     email = json_data["email"]
+
+    cur.execute("select count(*) from expidite.users where email=%s", email)
+    result = cur.fetchone()
+
+    if (result['count(*)'] > 0):
+        return {"msg": "Email is already in use. Please login or use a different email."}, 401
+
+    
+    cur.execute("select count(*) from expidite.users where username=%s", username)
+    result = cur.fetchone()
+
+    if (result['count(*)'] > 0):
+        return {"msg": "Username is taken. Please choose a different one."}, 500
+    
+    cur.execute("select count(*) from expidite.users where email=%s", email)
+    result = cur.fetchone()
 
     cur.execute("insert into expidite.users set username=%s, password=%s, email=%s;", (username, password, email))
 
@@ -203,7 +219,7 @@ def delete_item():
     except pymysql.err.IntegrityError as err:
         return Response("There was a problem deleting the item", status=404, content_type="text/plain")
 
-    return Response("clothing deleted successfully", status=200, content_type="application.json")
+    return Response("Deleted successfully", status=200, content_type="application.json")
 
 @app.route("/api/items/update", methods = ["POST"])
 @jwt_required()
@@ -226,7 +242,7 @@ def update_item():
     except pymysql.err.IntegrityError as err:
         return Response("There was a problem deleting the item", status=404, content_type="text/plain")
 
-    return Response("clothing deleted successfully", status=200, content_type="application.json")
+    return Response("updated successfully", status=200, content_type="application.json")
 
 # add category for specified user
 @app.route("/api/categories/add", methods = ["POST"])
