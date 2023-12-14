@@ -134,7 +134,6 @@ def add_user():
 
     if (result['count(*)'] > 0):
         return {"msg": "Email is already in use. Please login or use a different email."}, 401
-
     
     cur.execute("select count(*) from expidite.users where username=%s", username)
     result = cur.fetchone()
@@ -244,6 +243,25 @@ def update_item():
 
     return Response("updated successfully", status=200, content_type="application.json")
 
+# get categories for specified user
+@app.route("/api/categories", methods = ["GET", "POST"])
+@jwt_required()
+def get_categories():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+
+    cur.execute("SELECT DISTINCT * FROM expidite.categories where user_id=%s;", user_id)
+    result = cur.fetchall()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
 # add category for specified user
 @app.route("/api/categories/add", methods = ["POST"])
 @jwt_required()
@@ -253,6 +271,12 @@ def add_category():
     json_data = request.get_json()
     user_id  = json_data["user_id"]
     category = json_data["category"]
+
+    cur.execute("select count(*) from expidite.categories where user_id=%s and category=%s", (user_id, category))
+    result = cur.fetchone()
+
+    if (result['count(*)'] > 0):
+        return {"msg": "This catgeory already exists."}, 500
 
     cur.execute("insert into expidite.categories set user_id=%s, category=%s;", (user_id, category))
     result = cur.fetchone()
@@ -264,16 +288,60 @@ def add_category():
 
     return rsp
 
-# get categories for specified user
-@app.route("/api/categories", methods = ["GET", "POST"])
+# update category for specified user
+@app.route("/api/categories/update", methods = ["POST"])
 @jwt_required()
-def get_categories():
+def update_category():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id  = json_data["user_id"]
+    updated_category = json_data["updated_category"]
+    current_category = json_data["current_category"]
+
+    cur.execute("select count(*) from expidite.categories where user_id=%s and category=%s", (user_id, updated_category))
+    result = cur.fetchone()
+
+    if (result['count(*)'] > 0):
+        return {"msg": "This catgeory already exists."}, 500
+
+    cur.execute("update expidite.categories set category=%s where user_id=%s and category=%s;", (updated_category, user_id, current_category))
+    result = cur.fetchone()
+
+    if result:
+        rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
+    else:
+        rsp = Response(json.dumps([]), status=200, content_type="text/plain")
+
+    return rsp
+
+# delete category for specified user
+@app.route("/api/categories/delete", methods = ["POST"])
+@jwt_required()
+def delete_category():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id = json_data["user_id"]
+    category  = json_data["category"]
+
+    try: 
+        cur.execute("delete from expidite.categories where category=%s and user_id=%s", (category, user_id))
+    except pymysql.err.IntegrityError as err:
+        return Response("There was a problem deleting the category", status=404, content_type="text/plain")
+
+    return Response("Deleted successfully", status=200, content_type="application.json")
+
+# get locations for specified user
+@app.route("/api/locations", methods = ["GET", "POST"])
+@jwt_required()
+def get_locations():
     cur = get_cur()
 
     json_data = request.get_json()
     user_id  = json_data["user_id"]
 
-    cur.execute("SELECT DISTINCT * FROM expidite.categories where user_id=%s;", user_id)
+    cur.execute("SELECT DISTINCT * FROM expidite.locations where user_id=%s;", user_id)
     result = cur.fetchall()
 
     if result:
@@ -303,17 +371,25 @@ def add_location():
 
     return rsp
 
-# get locations for specified user
-@app.route("/api/locations", methods = ["GET", "POST"])
+# update location for specified user
+@app.route("/api/locations/update", methods = ["POST"])
 @jwt_required()
-def get_locations():
+def update_location():
     cur = get_cur()
 
     json_data = request.get_json()
     user_id  = json_data["user_id"]
+    updated_location = json_data["updated_location"]
+    current_location = json_data["current_location"]
 
-    cur.execute("SELECT DISTINCT * FROM expidite.locations where user_id=%s;", user_id)
-    result = cur.fetchall()
+    cur.execute("select count(*) from expidite.locations where user_id=%s and location=%s", (user_id, updated_location))
+    result = cur.fetchone()
+
+    if (result['count(*)'] > 0):
+        return {"msg": "This location already exists."}, 500
+
+    cur.execute("update expidite.locations set location=%s where user_id=%s and location=%s;", ( updated_location, user_id, current_location))
+    result = cur.fetchone()
 
     if result:
         rsp = Response(json.dumps(result, indent=4), status=200, content_type="application.json")
@@ -321,6 +397,23 @@ def get_locations():
         rsp = Response(json.dumps([]), status=200, content_type="text/plain")
 
     return rsp
+
+# delete location for specified user
+@app.route("/api/locations/delete", methods = ["POST"])
+@jwt_required()
+def delete_location():
+    cur = get_cur()
+
+    json_data = request.get_json()
+    user_id = json_data["user_id"]
+    location  = json_data["location"]
+
+    try: 
+        cur.execute("delete from expidite.locations where location=%s and user_id=%s", (location, user_id))
+    except pymysql.err.IntegrityError as err:
+        return Response("There was a problem deleting the location", status=404, content_type="text/plain")
+
+    return Response("Location deleted successfully", status=200, content_type="application.json")
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8000, debug=True)
