@@ -11,7 +11,7 @@ CORS(app)
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 jwt = JWTManager(app)
 
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
